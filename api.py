@@ -5,6 +5,7 @@ from schemas import SistemaDTO, EstadoSensorDTO, LecturaSensorDTO
 import asyncio
 import json
 from typing import List
+from datetime import datetime
 
 
 app = FastAPI()
@@ -39,14 +40,23 @@ manager = ConnectionManager()
 @app.get("/api/sistema", response_model=SistemaDTO)
 async def estado_sistema():
     estados = gestor.obtener_estado_general()
+
+    # Asegurar que ultima_lectura sea datetime (no string)
+    for estado in estados.values():
+        if isinstance(estado["ultima_lectura"], str):
+            try:
+                estado["ultima_lectura"] = datetime.strptime(estado["ultima_lectura"], "%H:%M:%S")
+            except ValueError:
+                estado["ultima_lectura"] = datetime.now()  # fallback seguro
+
     total_lecturas = sum(e['total_lecturas'] for e in estados.values())
     total_anomalias = sum(e['total_anomalias'] for e in estados.values())
-    
+
     return {
         "sensores": estados,
         "total_lecturas": total_lecturas,
         "total_anomalias": total_anomalias,
-        "tasa_global_anomalias": (total_anomalias/total_lecturas)*100 if total_lecturas > 0 else 0
+        "tasa_global_anomalias": (total_anomalias / total_lecturas) * 100 if total_lecturas > 0 else 0
     }
 
 @app.get("/api/sensores/{sensor_id}/lecturas", response_model=List[LecturaSensorDTO])
