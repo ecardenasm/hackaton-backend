@@ -1,5 +1,4 @@
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
-from fastapi.staticfiles import StaticFiles
 from core.modelo import ModeloAnomalias
 from core.gestor import GestorSensores
 from schemas import SistemaDTO, EstadoSensorDTO, LecturaSensorDTO
@@ -7,7 +6,6 @@ import asyncio
 import json
 
 app = FastAPI()
-app.mount("/static", StaticFiles(directory="static"), name="static")
 
 # Inicializar el sistema existente
 modelo = ModeloAnomalias()
