@@ -215,7 +215,7 @@ class SensorIoT:
             'tasa_anomalias_pct': round(tasa_anomalias, 2),
             'lecturas_por_minuto': self.lecturas_por_minuto,
             'buffer_size': len(self.data_buffer),
-            'ultima_lectura': self.ultima_lectura['timestamp'].strftime('%H:%M:%S') if self.ultima_lectura else None,
+            'ultima_lectura': self.ultima_lectura if self.ultima_lectura else None,
             'tiene_alerta_activa': self.ultima_lectura['alerta_total'] if self.ultima_lectura else False
         }
     
@@ -239,8 +239,10 @@ class SensorIoT:
                 'voltaje_v': lectura['voltaje_v'],
                 'eficiencia_pct': lectura['eficiencia_pct'],
                 'alerta_total': lectura['alerta_total'],
-                'fuentes_alerta': ','.join(lectura['fuente_alerta']),
-                'delta_eficiencia': lectura['delta_efic']
+                'fuentes_alerta': ','.join(lectura['fuentes_alerta']),
+
+                'delta_eficiencia': lectura.get('delta_efic')
+
             }
             
             # Agregar alertas individuales
