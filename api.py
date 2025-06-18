@@ -4,6 +4,8 @@ from core.gestor import GestorSensores
 from schemas import SistemaDTO, EstadoSensorDTO, LecturaSensorDTO
 import asyncio
 import json
+from typing import List
+
 
 app = FastAPI()
 
