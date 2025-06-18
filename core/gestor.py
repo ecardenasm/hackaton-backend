@@ -1,6 +1,6 @@
 import time
 import queue
-from sensor import SensorIoT
+from core.sensor import SensorIoT
 
 class GestorSensores:
     """Gestor centralizado para múltiples sensores"""
