@@ -206,7 +206,14 @@ class SensorIoT:
     def obtener_estado(self):
         """Obtiene el estado actual del sensor"""
         tasa_anomalias = (self.total_anomalias / max(1, self.total_lecturas)) * 100
-        
+
+        # Reemplazar claves para coincidir con el esquema
+        lectura = None
+        if self.ultima_lectura:
+            lectura = self.ultima_lectura.copy()
+            lectura["fuentes_alerta"] = lectura.pop("fuente_alerta", [])
+            lectura["delta_eficiencia"] = lectura.pop("delta_efic", None)
+    
         return {
             'sensor_id': self.sensor_id,
             'activo': self.running,
@@ -215,7 +222,7 @@ class SensorIoT:
             'tasa_anomalias_pct': round(tasa_anomalias, 2),
             'lecturas_por_minuto': self.lecturas_por_minuto,
             'buffer_size': len(self.data_buffer),
-            'ultima_lectura': self.ultima_lectura if self.ultima_lectura else None,
+            'ultima_lectura': lectura,
             'tiene_alerta_activa': self.ultima_lectura['alerta_total'] if self.ultima_lectura else False
         }
     
