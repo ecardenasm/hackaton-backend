@@ -1,6 +1,7 @@
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from fastapi.staticfiles import StaticFiles
-from main import GestorSensores, ModeloAnomalias
+from core.modelo import ModeloAnomalias
+from core.gestor import GestorSensores
 from schemas import SistemaDTO, EstadoSensorDTO, LecturaSensorDTO
 import asyncio
 import json
